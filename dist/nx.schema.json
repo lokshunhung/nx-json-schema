@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "implicitDependencyEntry": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          { "enum": ["*"] },
+          { "type": "array", "items": { "type": "string" } },
+          { "$ref": "#/definitions/implicitJsonSubsetDependency" }
+        ]
+      }
+    },
+    "implicitJsonSubsetDependency": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          { "enum": ["*"] },
+          { "type": "array", "items": { "type": "array" } },
+          { "$ref": "#/definitions/implicitJsonSubsetDependency" }
+        ]
+      }
+    },
+    "nxAffectedConfigDef": {
+      "type": "object",
+      "properties": {
+        "defaultBase": {
+          "type": "string",
+          "description": "Default based branch used by affected commands."
+        }
+      },
+      "additionalProperties": false
+    },
+    "nxJsonConfigDef": {
+      "type": "object",
+      "description": "Nx.json configuration",
+      "properties": {
+        "implicitDependencies": {
+          "$ref": "#/definitions/implicitDependencyEntry"
+        },
+        "npmScope": { "type": "string" },
+        "affected": { "$ref": "#/definitions/nxAffectedConfigDef" },
+        "projects": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/nxJsonProjectConfigDef"
+          }
+        },
+        "workspaceLayout": {
+          "type": "object",
+          "properties": {
+            "libsDir": { "type": "string" },
+            "appsDir": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "tasksRunnerOptions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "runner": { "type": "string" },
+              "options": { "type": "object", "additionalProperties": true }
+            },
+            "additionalProperties": false,
+            "required": ["runner"]
+          }
+        }
+      },
+      "required": ["implicitDependencies", "npmScope", "projects"]
+    },
+    "nxJsonProjectConfigDef": {
+      "type": "object",
+      "properties": {
+        "implicitDependencies": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  }
+}
