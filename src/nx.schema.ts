@@ -94,6 +94,7 @@ const nxJsonSchema: JSONSchema7 = {
     nxJsonConfigDef,
     nxJsonProjectConfigDef,
   },
+  $ref: '#/definitions/nxJsonConfigDef',
 };
 
 export default {
